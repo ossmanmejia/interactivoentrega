@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kit Educativo Eloísa Latorre - ¿Y tú cómo actuarías?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4CAF50, #2196F3, #FF9800);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .scene {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .scene.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scene-content {
+            margin-bottom: 30px;
+        }
+
+        .case-title {
+            color: #4CAF50;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .situation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+            text-align: left;
+        }
+
+        .question {
+            font-weight: 600;
+            color: #333;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .option-btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback {
+            display: none;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.positive {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .feedback.neutral {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .feedback.negative {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .main-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .secondary-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+
+        .instructions ul {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            color: #1976d2;
+        }
+
+        .final-message {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .responses-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .responses-container.show {
+            display: block;
+        }
+
+        .response-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            text-align: left;
+        }
+
+        .case-number {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .options {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Escena 1: Introducción -->
+        <div class="scene active" id="scene-1">
+            <h1>¿Y tú cómo actuarías?</h1>
+            <p class="subtitle"><strong>Actividad Interactiva</strong></p>
+            <p class="subtitle">⏱️ Duración estimada: 10 a 15 minutos</p>
+
+            <div class="situation">
+                <h3>Objetivo:</h3>
+                <p>Reflexionar sobre situaciones reales que pueden surgir en la entrega del Kit Educativo Eloísa Latorre
+                    y fortalecer la toma de decisiones pedagógicas y logísticas.</p>
+            </div>
+
+            <div class="scene-content">
+                <p style="font-size: 1.1em; margin: 20px 0;">En este recorrido interactivo, te invitamos a través de
+                    tres situaciones reales, tomar decisiones, enfrentar imprevistos y reflexionar sobre cómo hacer de
+                    cada entrega una experiencia significativa.</p>
+            </div>
+
+            <button class="main-btn" onclick="nextScene(2)">Iniciar</button>
+        </div>
+
+        <!-- Escena 2: Instrucciones -->
+        <div class="scene" id="scene-2">
+            <h1>Instrucciones</h1>
+
+            <div class="instructions">
+                <ul>
+                    <li>Lee cada situación con atención.</li>
+                    <li>Elige una de las opciones disponibles.</li>
+                    <li>Recibirás retroalimentación inmediata.</li>
+                    <li>Puedes explorar distintos caminos.</li>
+                </ul>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
+            </div>
+
+            <button class="main-btn" onclick="nextScene(3)">Comenzar casos</button>
+        </div>
+
+        <!-- Escena 3: Caso 1 -->
+        <div class="scene" id="scene-3">
+            <div class="case-title">CASO 1: Entrega durante un evento institucional</div>
+
+            <div class="situation">
+                <strong>Situación:</strong> Llegas a la institución y te encuentras con una feria escolar en marcha. Te
+                habían asignado 15 minutos para la entrega, pero el cronograma se retrasó. Tienes 5 minutos y más de 50
+                personas reunidas. El docente está ocupado en otra actividad.
+            </div>
+
+            <div class="question">¿Qué haces?</div>
+
+            <div class="options">
+                <button class="option-btn" onclick="showFeedback('case1-a')">
+                    A) Entregas rápidamente los kits sin explicar mucho.
+                </button>
+                <button class="option-btn" onclick="showFeedback('case1-b')">
+                    B) Buscas al docente para reprogramar, aunque eso implique esperar.
+                </button>
+                <button class="option-btn" onclick="showFeedback('case1-c')">
+                    C) Te presentas brevemente ante el grupo, explicas el propósito del kit en 2 minutos y dejas una
+                    guía para el docente.
+                </button>
+            </div>
+
+            <div class="feedback negative" id="case1-a">
+                ❌ <strong>Feedback:</strong> Entregar sin contexto puede generar confusión y desaprovechar el momento
+                pedagógico.
+            </div>
+
+            <div class="feedback neutral" id="case1-b">
+                🟡 <strong>Feedback:</strong> Puede funcionar si tienes tiempo, pero podría no resolverse rápidamente.
+            </div>
+
+            <div class="feedback positive" id="case1-c">
+                ✅ <strong>Feedback:</strong> Muy bien. Aprovechas el espacio disponible y dejas una ruta para continuar
+                el proceso.
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="main-btn" onclick="nextScene(4)" style="display: none;" id="continue-case2">Continuar al
+                    Caso 2</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+            </div>
+        </div>
+
+        <!-- Escena 4: Caso 2 -->
+        <div class="scene" id="scene-4">
+            <div class="case-title">CASO 2: Entrega a un grupo de estudiantes</div>
+
+            <div class="situation">
+                <strong>Situación:</strong> En el aula hay un grupo de niños y niñas con poco contexto sobre el
+                programa. Hay ruido, dispersión y varios se frustran al no entender para qué sirve el kit. El docente
+                está presente, pero deja que tú lideres todo el encuentro.
+            </div>
+
+            <div class="question">¿Cómo respondes?</div>
+
+            <div class="options">
+                <button class="option-btn" onclick="showFeedback('case2-a')">
+                    A) Explicas todo rápidamente para mantener el control.
+                </button>
+                <button class="option-btn" onclick="showFeedback('case2-b')">
+                    B) Inicias con una pregunta provocadora: "¿Qué guardianes de la naturaleza conocen ustedes?".
+                </button>
+                <button class="option-btn" onclick="showFeedback('case2-c')">
+                    C) Repartes el material para que se entretengan mientras explicas.
+                </button>
+            </div>
+
+            <div class="feedback negative" id="case2-a">
+                ❌ <strong>Feedback:</strong> Es posible que pierdas su atención y no generes conexión.
+            </div>
+
+            <div class="feedback positive" id="case2-b">
+                ✅ <strong>Feedback:</strong> Excelente. Activar sus saberes previos los motiva y da sentido al
+                encuentro.
+            </div>
+
+            <div class="feedback neutral" id="case2-c">
+                🟡 <strong>Feedback:</strong> Puede calmar la situación, pero sin guía clara puede desorganizarse.
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="main-btn" onclick="nextScene(5)" style="display: none;" id="continue-case3">Continuar al
+                    Caso 3</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+            </div>
+        </div>
+
+        <!-- Escena 5: Caso 3 -->
+        <div class="scene" id="scene-5">
+            <div class="case-title">CASO 3: Entrega a un único funcionario</div>
+
+            <div class="situation">
+                <strong>Situación:</strong> Te recibe solo el coordinador académico. No hay estudiantes ni docentes
+                presentes. Te pide que dejes los kits sin explicación porque los revisará más adelante.
+            </div>
+
+            <div class="question">¿Qué haces?</div>
+
+            <div class="options">
+                <button class="option-btn" onclick="showFeedback('case3-a')">
+                    A) Dejas los kits, firmas el formato y te retiras.
+                </button>
+                <button class="option-btn" onclick="showFeedback('case3-b')">
+                    B) Solicitas unos minutos para mostrar los materiales y explicar su uso.
+                </button>
+                <button class="option-btn" onclick="showFeedback('case3-c')">
+                    C) Dejas un folleto y contacto para dudas futuras.
+                </button>
+            </div>
+
+            <div class="feedback negative" id="case3-a">
+                ❌ <strong>Feedback:</strong> Cumples con la entrega logística, pero pierdes valor pedagógico.
+            </div>
+
+            <div class="feedback positive" id="case3-b">
+                ✅ <strong>Feedback:</strong> Muy bien. Una explicación breve puede marcar la diferencia en su
+                implementación.
+            </div>
+
+            <div class="feedback neutral" id="case3-c">
+                🟡 <strong>Feedback:</strong> Es una buena alternativa complementaria, pero sin conversación directa se
+                pierden detalles importantes.
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="main-btn" onclick="nextScene(6)" style="display: none;" id="continue-final">Ver mis
+                    respuestas y finalizar</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+            </div>
+        </div>
+
+        <!-- Escena 6: Cierre -->
+        <div class="scene" id="scene-6">
+            <h1>Cierre y reflexión</h1>
+
+            <div class="final-message">
+                <p style="font-size: 1.1em; line-height: 1.6;">Gracias por recorrer estos casos. Recuerda que cada
+                    entrega es una oportunidad para sembrar aprendizajes, fortalecer vínculos y activar el asombro. Tu
+                    presencia, tus palabras y tu cuidado también educan.</p>
+            </div>
+
+            <div class="responses-container" id="responses-summary">
+                <h3 style="color: #4CAF50; margin-bottom: 20px;">📋 Resumen de tus decisiones:</h3>
+                <div id="responses-list"></div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+
+            <button class="main-btn" onclick="nextScene(1)">Volver al inicio</button>
+            <button class="secondary-btn" onclick="sendResponses()">Enviar respuestas</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScene = 1;
+        let responses = {
+            case1: null,
+            case2: null,
+            case3: null
+        };
+
+        function nextScene(sceneNumber) {
+            // Ocultar escena actual
+            document.getElementById(`scene-${currentScene}`).classList.remove('active');
+
+            // Mostrar nueva escena
+            setTimeout(() => {
+                document.getElementById(`scene-${sceneNumber}`).classList.add('active');
+                currentScene = sceneNumber;
+
+                // Reset responses if going back to start
+                if (sceneNumber === 1) {
+                    responses = { case1: null, case2: null, case3: null };
+                    // Hide all feedbacks
+                    const feedbacks = document.querySelectorAll('.feedback');
+                    feedbacks.forEach(f => f.classList.remove('show'));
+                    // Hide continue buttons
+                    const continueButtons = document.querySelectorAll('[id^="continue-"]');
+                    continueButtons.forEach(b => b.style.display = 'none');
+                }
+
+                // Show responses summary if on final scene
+                if (sceneNumber === 6) {
+                    showResponsesSummary();
+                }
+            }, 300);
+        }
+
+        function showFeedback(feedbackId) {
+            // Hide all feedbacks in current case first
+            const currentCaseNumber = feedbackId.split('-')[0].slice(-1);
+            const caseFeedbacks = document.querySelectorAll(`[id^="case${currentCaseNumber}-"]`);
+            caseFeedbacks.forEach(f => f.classList.remove('show'));
+
+            // Show selected feedback
+            const feedback = document.getElementById(feedbackId);
+            feedback.classList.add('show');
+
+            // Store response
+            const caseNum = feedbackId.split('-')[0];
+            const option = feedbackId.split('-')[1].toUpperCase();
+            responses[caseNum] = {
+                option: option,
+                text: getOptionText(caseNum, option),
+                feedback: feedback.textContent.trim()
+            };
+
+            // Show continue button
+            const caseNumber = feedbackId.split('case')[1].split('-')[0];
+            const continueBtn = document.getElementById(`continue-case${parseInt(caseNumber) + 1}`) ||
+                document.getElementById('continue-final');
+            if (continueBtn) {
+                continueBtn.style.display = 'inline-block';
+            }
+        }
+
+        function getOptionText(caseNum, option) {
+            const texts = {
+                case1: {
+                    A: "Entregas rápidamente los kits sin explicar mucho.",
+                    B: "Buscas al docente para reprogramar, aunque eso implique esperar.",
+                    C: "Te presentas brevemente ante el grupo, explicas el propósito del kit en 2 minutos y dejas una guía para el docente."
+                },
+                case2: {
+                    A: "Explicas todo rápidamente para mantener el control.",
+                    B: "Inicias con una pregunta provocadora: '¿Qué guardianes de la naturaleza conocen ustedes?'.",
+                    C: "Repartes el material para que se entretengan mientras explicas."
+                },
+                case3: {
+                    A: "Dejas los kits, firmas el formato y te retiras.",
+                    B: "Solicitas unos minutos para mostrar los materiales y explicar su uso.",
+                    C: "Dejas un folleto y contacto para dudas futuras."
+                }
+            };
+            return texts[caseNum][option];
+        }
+
+        function showResponsesSummary() {
+            const responsesList = document.getElementById('responses-list');
+            const responsesContainer = document.getElementById('responses-summary');
+
+            let summaryHTML = '';
+
+            if (responses.case1) {
+                summaryHTML += `
+                    <div class="response-item">
+                        <span class="case-number">Caso 1:</span> Opción ${responses.case1.option}) ${responses.case1.text}
+                    </div>
+                `;
+            }
+
+            if (responses.case2) {
+                summaryHTML += `
+                    <div class="response-item">
+                        <span class="case-number">Caso 2:</span> Opción ${responses.case2.option}) ${responses.case2.text}
+                    </div>
+                `;
+            }
+
+            if (responses.case3) {
+                summaryHTML += `
+                    <div class="response-item">
+                        <span class="case-number">Caso 3:</span> Opción ${responses.case3.option}) ${responses.case3.text}
+                    </div>
+                `;
+            }
+
+            if (summaryHTML) {
+                responsesList.innerHTML = summaryHTML;
+                responsesContainer.classList.add('show');
+            }
+        }
+
+        function sendResponses() {
+            // Create summary of all responses
+            let responseData = {
+                timestamp: new Date().toISOString(),
+                activity: "Kit Educativo Eloísa Latorre - ¿Y tú cómo actuarías?",
+                responses: responses
+            };
+
+            // Create downloadable file
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(responseData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "respuestas_kit_educativo.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+
+            // Show confirmation
+            alert("¡Respuestas guardadas! Se ha descargado un archivo con tus decisiones.");
+
+            // Could also send to a server here if needed
+            console.log("Responses to send:", responseData);
+        }
+    </script>
+</body>
+
+</html>
